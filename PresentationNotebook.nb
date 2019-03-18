@@ -1,0 +1,443 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 9.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       157,          7]
+NotebookDataLength[     16665,        435]
+NotebookOptionsPosition[     14662,        381]
+NotebookOutlinePosition[     14998,        396]
+CellTagsIndexPosition[     14955,        393]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[TextData[StyleBox["Using Kleene and Priest Logic Rules to Create Ternary \
+Logic Tables",
+ FontColor->GrayLevel[1]]], "Section",
+ CellChangeTimes->{{3.583107615045533*^9, 3.5831076156347322`*^9}, {
+   3.583107769411003*^9, 3.583107770887882*^9}, {3.676900801468212*^9, 
+   3.6769008204587507`*^9}, {3.708339004165366*^9, 3.708339007019346*^9}, 
+   3.708359016931118*^9},
+ TextAlignment->Center,
+ Background->RGBColor[
+  1, 0.5, 0],ExpressionUUID->"f178fff7-73f0-474e-a365-e24ce70e6361"],
+
+Cell[CellGroupData[{
+
+Cell["\<\
+Taha Shaikh
+Wolfram High School Summer Camp 2017\
+\>", "Subsection",
+ CellChangeTimes->{{3.583107811679845*^9, 3.583107818495682*^9}, {
+  3.614076250921157*^9, 3.614076251309596*^9}, {3.614076365379232*^9, 
+  3.6140763657428102`*^9}, {3.645808277751647*^9, 3.6458082808404527`*^9}, {
+  3.675433594417021*^9, 3.675433596359215*^9}, {3.6769007306979823`*^9, 
+  3.67690073739382*^9}, {3.708338880050069*^9, 3.708338896392001*^9}, {
+  3.7083590196566763`*^9, 3.708359021011498*^9}},
+ TextAlignment->Center,ExpressionUUID->"9237ad7f-c3e5-46a8-8397-27a7eeb61bd6"],
+
+Cell["\<\
+\tIn logic, three-valued logic (or ternary) is a many-valued logic system in \
+which there are three truth values indicating true, false and some \
+indeterminate third value. Traditionally, a boolean or binary logic system is \
+used where True and False are the truth values. Ternary logic has several \
+applications in electrical circuitry and computer science.
+\tThis project implements ternary logic into the Mathematica language. It \
+creates functions that generate ternary truth tables and adds support for the \
+third truth value, \[OpenCurlyDoubleQuote]Undecided\[CloseCurlyDoubleQuote], \
+or 0 in its boolean form. Additionally, a plot can be created to visualize \
+the truth tables created by the functions. All truth table possibilities are \
+converted into boolean values and are used to create a colorful plot. Several \
+patterns and structures can be seen in these colorful array plots. The \
+\[OpenCurlyDoubleQuote]TernaryFunction\[CloseCurlyDoubleQuote] will \
+\[OpenCurlyDoubleQuote]translate\[CloseCurlyDoubleQuote] a truth table into a \
+ternary logic expression with the given variables. Another function will \
+create a table of every possible permutation of the four basic logic gates \
+and the given variables. 
+\tAs of now, the function is unable to translate a \
+\[OpenCurlyDoubleQuote]random\[CloseCurlyDoubleQuote] table of values. This \
+is because not all ternary tables are valid. Ternary truth tables differ from \
+binary in the fact that all binary truth tables can be converted into a logic \
+expression. In the case of ternary logic, there are a large number of tables \
+that cannot be converted back into expressions. A ternary truth table with 9 \
+outputs could have a possible 3^9 different inputs. Out of these \
+possibilities, only a fraction of them work with the TernaryFunction \
+function. The order of the truth values also depends. Values entered in \
+orders other than True, False, and Undecided will not be processed by the \
+function.\
+\>", "Text",
+ CellChangeTimes->{{3.5831079212333317`*^9, 3.5831079344389668`*^9}, 
+   3.6769008390491695`*^9, {3.708338911817368*^9, 3.7083389163510523`*^9}, 
+   3.708359030402095*^9, {3.7083590933542747`*^9, 3.708359122995792*^9}, {
+   3.708359161591836*^9, 3.708359213062504*^9}, {3.708359317291154*^9, 
+   3.708359326671694*^9}, {3.7083594003194*^9, 3.708359409744573*^9}, {
+   3.708359457509034*^9, 3.70835946791644*^9}, {3.708359574705928*^9, 
+   3.708359865114966*^9}, {3.708364501906519*^9, 3.708364517835902*^9}, {
+   3.7083651275454607`*^9, 3.708365517778491*^9}, {3.7084089257173853`*^9, 
+   3.708408929264264*^9}, {3.708409014290917*^9, 
+   3.708409080491787*^9}},ExpressionUUID->"51dc87f1-7c71-48d5-805f-\
+d4f79d4149de"]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[TextData[StyleBox["Initialization code",
+ FontColor->GrayLevel[1]]], "Section",
+ InitializationGroup->True,
+ CellChangeTimes->{{3.58310782932751*^9, 3.583107831710331*^9}},
+ TextAlignment->Center,
+ Background->RGBColor[
+  1, 0.5, 0],ExpressionUUID->"d5a568af-76ad-4fd4-828d-d8b4bf645d71"],
+
+Cell["\<\
+The purpose of the code below is to introduce the basic logic operators in \
+Mathematica to the new truth value. By reassigning these values, the ternary \
+functions later defined are allowed to work.\
+\>", "Text",
+ CellChangeTimes->{{3.708363919149805*^9, 3.7083639522265167`*^9}, {
+  3.708364068687381*^9, 
+  3.708364084797607*^9}},ExpressionUUID->"bc29670a-e1f8-4dca-a244-\
+4e68ce231cfe"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Undecided", "=", "Undecided"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Unprotect", "[", "And", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"And", "[", 
+   RowBox[{"Undecided", ",", "True"}], "]"}], ":=", "Undecided"}], "\n", 
+ RowBox[{
+  RowBox[{"And", "[", 
+   RowBox[{"Undecided", ",", "Undecided"}], "]"}], ":=", "Undecided"}], "\n", 
+ RowBox[{
+  RowBox[{"Protect", "[", "And", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Unprotect", "[", "Boole", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Boole", "[", "Undecided", "]"}], ":=", 
+  "0"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Boole", "[", "False", "]"}], ":=", 
+  RowBox[{"-", "1"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Protect", "[", "Boole", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Unprotect", "[", "Or", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Or", "[", 
+   RowBox[{"Undecided", ",", "False"}], "]"}], ":=", 
+  "Undecided"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Or", "[", 
+   RowBox[{"Undecided", ",", "Undecided"}], "]"}], ":=", 
+  "Undecided"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Protect", "[", "Or", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Unprotect", "[", "Not", "]"}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"Not", "[", "Undecided", "]"}], ":=", "Undecided"}], "\n", 
+ RowBox[{
+  RowBox[{"Unprotect", "[", "Implies", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Implies", "[", 
+   RowBox[{"True", ",", "Undecided"}], "]"}], ":=", 
+  "Undecided"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Implies", "[", 
+   RowBox[{"Undecided", ",", "Undecided"}], "]"}], ":=", 
+  "True"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Implies", "[", 
+   RowBox[{"False", ",", "Undecided"}], "]"}], ":=", 
+  "True"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Implies", "[", 
+   RowBox[{"Undecided", ",", "True"}], "]"}], ":=", 
+  "True"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Implies", "[", 
+   RowBox[{"Undecided", ",", "False"}], "]"}], ":=", 
+  "Undecided"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Protect", "[", "Implies", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Unprotect", "[", "Nand", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Nand", "[", 
+   RowBox[{"Undecided", ",", "Undecided"}], "]"}], ":=", 
+  "Undecided"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Protect", "[", "Nand", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Unprotect", "[", "Nor", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Nor", "[", 
+   RowBox[{"Undecided", ",", "Undecided"}], "]"}], ":=", 
+  "Undecided"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Protect", "[", "And", "]"}], ";"}]}], "Input",
+ InitializationCell->True,
+ CellChangeTimes->{{3.7083389272829742`*^9, 3.7083389278628273`*^9}, {
+   3.7083389758368587`*^9, 3.708338984108374*^9}, 3.708339062840784*^9, {
+   3.708359882896369*^9, 3.708359890284144*^9}, {3.708359960231626*^9, 
+   3.708359980155436*^9}, {3.70836012343911*^9, 
+   3.708360129084402*^9}},ExpressionUUID->"e2c7fea1-2a6f-4ef8-9c1d-\
+a61f99de7ce3"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Project", "Section",
+ CellChangeTimes->{{3.583107893296578*^9, 3.583107894085239*^9}},
+ TextAlignment->Center,
+ FontColor->GrayLevel[1],
+ Background->RGBColor[
+  1, 0.5, 0],ExpressionUUID->"cd0fb4b3-615c-4113-ad21-ffa8e8d86871"],
+
+Cell[BoxData[
+ StyleBox[
+  RowBox[{"Ternary", " ", "Logic", " ", "Functions"}], "Subsection"]], "Input",
+ CellChangeTimes->{{3.708360111993477*^9, 3.708360126171739*^9}, {
+  3.708364111257173*^9, 3.7083641717535887`*^9}, {3.708364242524413*^9, 
+  3.708364247119479*^9}},ExpressionUUID->"59fa424b-b7d8-4514-b5c0-\
+72b344527bb9"],
+
+Cell["\<\
+This function will generate a ternary truth table based on an expression and \
+a list of the variable(s) used.\
+\>", "Text",
+ CellChangeTimes->{{3.7083641750463247`*^9, 3.7083641839703703`*^9}, 
+   3.708364254725647*^9},ExpressionUUID->"4b190069-8928-4eea-87c5-\
+98d359f1fd72"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TernaryTable", "[", 
+   RowBox[{"expr_", ",", "vars__"}], "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"ReplaceAll", "[", 
+     RowBox[{"expr", ",", 
+      RowBox[{"Thread", "[", 
+       RowBox[{"vars", "\[Rule]", "#"}], "]"}]}], "]"}], "&"}], "/@", 
+   RowBox[{"Tuples", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"True", ",", "False", ",", "Undecided"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"Length", "[", "vars", "]"}], "}"}]}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.708360111993477*^9, 3.708360126171739*^9}, {
+  3.708364111257173*^9, 
+  3.7083641889274063`*^9}},ExpressionUUID->"0847834d-3caa-40bd-ad77-\
+2366a8de445a"],
+
+Cell["\<\
+
+This function converts a ternary truth table into its initial logic \
+operation. \
+\>", "Text",
+ CellChangeTimes->{{3.708364211312788*^9, 3.708364212709257*^9}, {
+  3.708364260607484*^9, 
+  3.7083642883069468`*^9}},ExpressionUUID->"ba4bf6fc-ca7c-432f-91c7-\
+46558f38ea28"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TernaryFunction", "[", 
+   RowBox[{"table_List", ",", "vars_List"}], "]"}], ":=", 
+  RowBox[{
+   RowBox[{"AssociationThread", "[", 
+    RowBox[{
+     RowBox[{"Transpose", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"Groupings", "[", 
+         RowBox[{"#", ",", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"And", "\[Rule]", "2"}], ",", 
+            RowBox[{"Or", "\[Rule]", "2"}], ",", 
+            RowBox[{"Nor", "\[Rule]", "2"}], ",", 
+            RowBox[{"Nand", "\[Rule]", "2"}]}], "}"}]}], "]"}], "&"}], "/@", 
+       RowBox[{"Tuples", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"True", ",", "False", ",", "Undecided"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"Log", "[", 
+           RowBox[{"3", ",", 
+            RowBox[{"Length", "[", "table", "]"}]}], "]"}], "}"}]}], "]"}]}], 
+      "]"}], ",", 
+     RowBox[{"Groupings", "[", 
+      RowBox[{"vars", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"And", "\[Rule]", "2"}], ",", 
+         RowBox[{"Or", "\[Rule]", "2"}], ",", 
+         RowBox[{"Nor", "\[Rule]", "2"}], ",", 
+         RowBox[{"Nand", "\[Rule]", "2"}]}], "}"}], ",", "HoldForm"}], 
+      "]"}]}], "]"}], "[", "table", "]"}]}]], "Input",
+ CellChangeTimes->{{3.708360111993477*^9, 3.708360126171739*^9}, {
+   3.708364111257173*^9, 3.7083641889274063`*^9}, 3.7083642245926447`*^9, 
+   3.70842454039633*^9},ExpressionUUID->"80b7a363-5b22-42b0-9f15-\
+26cd4d867ef3"],
+
+Cell["\<\
+
+This function produces a colorful plot of the different logic operations. It \
+runs through every possible permutation of the basic logic operations.\
+\>", "Text",
+ CellChangeTimes->{
+  3.708364227830345*^9, {3.708364273995677*^9, 
+   3.708364285737232*^9}},ExpressionUUID->"a154ace3-ba4e-46d9-a30d-\
+dcf9b6fe475e"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"TernaryPlot", "[", "x_", "]"}], ":=", "\[IndentingNewLine]", 
+  RowBox[{"ArrayPlot", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{
+      RowBox[{"Boole", "[", 
+       RowBox[{"Groupings", "[", 
+        RowBox[{"#", ",", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"And", "\[Rule]", "2"}], ",", 
+           RowBox[{"Or", "\[Rule]", "2"}], ",", 
+           RowBox[{"Nand", "\[Rule]", "2"}], ",", 
+           RowBox[{"Nor", "\[Rule]", "2"}], ",", 
+           RowBox[{"Not", "\[Rule]", "1"}]}], "}"}]}], "]"}], "]"}], "&"}], "/@", 
+     RowBox[{"Tuples", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"True", ",", "False", ",", "Undecided"}], "}"}], ",", 
+       RowBox[{"{", "x", "}"}]}], "]"}]}], ",", 
+    RowBox[{"ColorRules", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"1", "\[Rule]", " ", "Green"}], ",", 
+       RowBox[{"0", "\[Rule]", " ", "LightBlue"}], ",", 
+       RowBox[{
+        RowBox[{"-", "1"}], "\[Rule]", " ", "Red"}]}], "}"}]}]}], 
+   "]"}]}]], "Input",
+ CellChangeTimes->{{3.708360111993477*^9, 3.708360126171739*^9}, {
+  3.708364111257173*^9, 3.7083641889274063`*^9}, {3.7083642245926447`*^9, 
+  3.708364235049526*^9}, {3.708365718152361*^9, 
+  3.708365719622612*^9}},ExpressionUUID->"fd038f6d-f3fe-4c87-a002-\
+10ee824625f1"],
+
+Cell["\<\
+
+This function produces all possible truth tables based on the number of \
+variables in the logic expression. It produces a truth table for every \
+possible permutation of the four basic logic operations. \
+\>", "Text",
+ CellChangeTimes->{
+  3.708364238170085*^9, {3.7083642819018183`*^9, 
+   3.708364284297614*^9}},ExpressionUUID->"bc80be12-f787-4d49-89d9-\
+a7ac2be8d43d"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"LotsOfTernaryTables", "[", "x_", "]"}], ":=", 
+  "\[IndentingNewLine]", 
+  RowBox[{"MatrixForm", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"Groupings", "[", 
+      RowBox[{"#", ",", 
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"And", "\[Rule]", "2"}], ",", 
+         RowBox[{"Or", "\[Rule]", "2"}], ",", 
+         RowBox[{"Nand", "\[Rule]", "2"}], ",", 
+         RowBox[{"Nor", "\[Rule]", "2"}], ",", 
+         RowBox[{"Not", "\[Rule]", "1"}]}], "}"}], ",", "HoldForm"}], "]"}], 
+     "&"}], "/@", 
+    RowBox[{"Tuples", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"True", ",", "False", ",", "Undecided"}], "}"}], ",", 
+      RowBox[{"{", "x", "}"}]}], "]"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.708360111993477*^9, 3.708360126171739*^9}, {
+  3.708364111257173*^9, 3.7083641889274063`*^9}, {3.7083642245926447`*^9, 
+  3.708364235049526*^9}},ExpressionUUID->"b1c32c9b-6f03-4118-a557-\
+d0a7ad6953c6"]
+}, Open  ]]
+},
+WindowSize->{865, 674},
+WindowMargins->{{264, Automatic}, {Automatic, 47}},
+FrontEndVersion->"11.1 for Linux x86 (64-bit) (April 18, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[579, 22, 491, 9, 105, "Section", "ExpressionUUID" -> \
+"f178fff7-73f0-474e-a365-e24ce70e6361"],
+Cell[CellGroupData[{
+Cell[1095, 35, 567, 10, 70, "Subsection", "ExpressionUUID" -> \
+"9237ad7f-c3e5-46a8-8397-27a7eeb61bd6"],
+Cell[1665, 47, 2725, 40, 407, "Text", "ExpressionUUID" -> \
+"51dc87f1-7c71-48d5-805f-d4f79d4149de"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4439, 93, 293, 6, 69, "Section", "ExpressionUUID" -> \
+"d5a568af-76ad-4fd4-828d-d8b4bf645d71",
+ InitializationGroup->True],
+Cell[4735, 101, 401, 8, 55, "Text", "ExpressionUUID" -> \
+"bc29670a-e1f8-4dca-a244-4e68ce231cfe"],
+Cell[5139, 111, 3107, 85, 668, "Input", "ExpressionUUID" -> \
+"e2c7fea1-2a6f-4ef8-9c1d-a61f99de7ce3",
+ InitializationCell->True]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8283, 201, 234, 5, 69, "Section", "ExpressionUUID" -> \
+"cd0fb4b3-615c-4113-ad21-ffa8e8d86871"],
+Cell[8520, 208, 327, 6, 41, "Input", "ExpressionUUID" -> \
+"59fa424b-b7d8-4514-b5c0-72b344527bb9"],
+Cell[8850, 216, 287, 6, 33, "Text", "ExpressionUUID" -> \
+"4b190069-8928-4eea-87c5-98d359f1fd72"],
+Cell[9140, 224, 710, 19, 57, "Input", "ExpressionUUID" -> \
+"0847834d-3caa-40bd-ad77-2366a8de445a"],
+Cell[9853, 245, 283, 8, 55, "Text", "ExpressionUUID" -> \
+"ba4bf6fc-ca7c-432f-91c7-46558f38ea28"],
+Cell[10139, 255, 1497, 39, 125, "Input", "ExpressionUUID" -> \
+"80b7a363-5b22-42b0-9f15-26cd4d867ef3"],
+Cell[11639, 296, 326, 8, 77, "Text", "ExpressionUUID" -> \
+"a154ace3-ba4e-46d9-a30d-dcf9b6fe475e"],
+Cell[11968, 306, 1325, 34, 80, "Input", "ExpressionUUID" -> \
+"fd038f6d-f3fe-4c87-a002-10ee824625f1"],
+Cell[13296, 342, 383, 9, 77, "Text", "ExpressionUUID" -> \
+"bc80be12-f787-4d49-89d9-a7ac2be8d43d"],
+Cell[13682, 353, 964, 25, 80, "Input", "ExpressionUUID" -> \
+"b1c32c9b-6f03-4118-a557-d0a7ad6953c6"]
+}, Open  ]]
+}
+]
+*)
+
